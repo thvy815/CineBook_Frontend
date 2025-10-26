@@ -32,7 +32,7 @@ const Register: React.FC = () => {
       <div className="absolute inset-0 bg-black/60"></div>
 
       {/* Nội dung có thể scroll */}
-      <div className="relative z-10 w-full max-w-md bg-white/95 rounded-md shadow-xl p-8 mt-24 mb-16">
+      <div className="relative z-10 w-full max-w-md bg-[#ffffffee] rounded-md shadow-xl p-8 mt-24 mb-16">
         {/* Tabs đăng nhập / đăng ký */}
         <div className="flex justify-center mb-6 space-x-8">
           <a
@@ -59,7 +59,7 @@ const Register: React.FC = () => {
               value={formData.fullName}
               onChange={handleChange}
               className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
-              placeholder="Nhập họ tên"
+              placeholder="Nhập họ và tên"
               required
             />
           </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import bgCinema from "@/assets/images/bg-cinema.jpg";
 
@@ -14,7 +15,7 @@ const Login: React.FC = () => {
       <div className="absolute inset-0 bg-black/60 min-h-screen"></div>
 
       {/* Khung form */}
-      <div className="relative z-10 w-full max-w-md bg-white/95 rounded-md shadow-xl p-8 mt-24 mb-16">
+      <div className="relative z-10 w-full max-w-md bg-[#ffffffee] rounded-md shadow-xl p-8 mt-24 mb-16">
         {/* Tabs đăng nhập / đăng ký */}
         <div className="flex justify-center mb-6 space-x-8">
           <h2 className="text-xl font-bold text-black border-b-2 border-yellow-400 pb-1 cursor-pointer">
@@ -72,9 +73,12 @@ const Login: React.FC = () => {
               <input type="checkbox" className="mr-2 accent-yellow-400" />
               Lưu mật khẩu đăng nhập
             </label>
-            <a href="#" className="text-blue-600 hover:underline">
+            <Link 
+              to="/forgot-password"
+              className="text-blue-600 hover:underline"
+            >
               Quên mật khẩu?
-            </a>
+            </Link>
           </div>
 
           {/* Nút đăng nhập */}
