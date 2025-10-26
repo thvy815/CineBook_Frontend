@@ -6,7 +6,7 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Profile from "./pages/User/Profile";
-
+import ShowtimeList from './pages/Movie/ShowtimeList.tsx';
 function App() {
   return (
     <Router>
@@ -27,6 +27,8 @@ function App() {
           {/* Home pages */}
           <Route path="/home" element={<BackgroundLayout> <Home /> </BackgroundLayout>} />
 
+                  {/* Movie pages */}
+         <Route path="/showtimes" element={<BackgroundLayout> <ShowtimeList /> </BackgroundLayout>} />
         </Routes>
       </Layout>
     </Router>

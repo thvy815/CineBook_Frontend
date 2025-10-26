@@ -1,7 +1,7 @@
 // src/pages/User/Profile.tsx
 import { useState } from "react";
 import UserProfile from "./UserProfile";
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("info");
