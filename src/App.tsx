@@ -7,6 +7,7 @@ import Register from "./pages/Auth/Register";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Profile from "./pages/User/Profile";
 import ShowtimeList from './pages/Movie/ShowtimeList.tsx';
+import PromotionSelection from "./pages/Booking/PromotionSelection.tsx";
 function App() {
   return (
     <Router>
@@ -28,7 +29,9 @@ function App() {
           <Route path="/home" element={<BackgroundLayout> <Home /> </BackgroundLayout>} />
 
                   {/* Movie pages */}
-         <Route path="/showtimes" element={<BackgroundLayout> <ShowtimeList /> </BackgroundLayout>} />
+                  <Route path="/showtimes" element={<BackgroundLayout> <ShowtimeList /> </BackgroundLayout>} />
+                  { /* Booking pages */}
+                  <Route path="/promotions" element={<BackgroundLayout> <PromotionSelection /> </BackgroundLayout>} />
         </Routes>
       </Layout>
     </Router>
