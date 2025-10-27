@@ -5,7 +5,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
-import Profile from "./pages/User/Profile";
+import Profile from "./pages/User/ProfilePage";
 
 function App() {
   return (

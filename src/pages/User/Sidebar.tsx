@@ -44,21 +44,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
         </button>
         <button
           className={`flex items-center space-x-2 p-2 rounded ${
-            activeTab === "favoriteMovie" ? "bg-yellow-400 text-black" : ""
+            activeTab === "favorites" ? "bg-yellow-400 text-black" : ""
           }`}
-          onClick={() => setActiveTab("favoriteMovie")}
+          onClick={() => setActiveTab("favorites")}
         >
           <span>👤</span>
           <span>Phim yêu thích</span>
-        </button>
-        <button
-          className={`flex items-center space-x-2 p-2 rounded ${
-            activeTab === "resetPassword" ? "bg-yellow-400 text-black" : ""
-          }`}
-          onClick={() => setActiveTab("resetPassword")}
-        >
-          <span>⭐</span>
-          <span>Đổi mật khẩu</span>
         </button>
         <button
           className={`flex items-center space-x-2 p-2 rounded ${
@@ -67,7 +58,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
           onClick={() => setActiveTab("history")}
         >
           <span>⏱️</span>
-          <span>Lịch sử mua hàng</span>
+          <span>Lịch sử đặt vé</span>
+        </button>
+        <button
+          className={`flex items-center space-x-2 p-2 rounded ${
+            activeTab === "password" ? "bg-yellow-400 text-black" : ""
+          }`}
+          onClick={() => setActiveTab("password")}
+        >
+          <span>⭐</span>
+          <span>Đổi mật khẩu</span>
         </button>
       </div>
 

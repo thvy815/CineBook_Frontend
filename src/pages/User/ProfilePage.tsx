@@ -1,13 +1,16 @@
 // src/pages/User/Profile.tsx
 import { useState } from "react";
+import Sidebar from "./Sidebar";
 import UserProfile from "./UserProfile";
-import Sidebar from "./SideBar";
+import BookingHistory from "./BookingHistory";
+import ChangePassword from "./ChangePassword";
+import FavoriteMovies from "./FavoriteMovies";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("info");
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-900 pt-20 px-8">
+    <div className="flex justify-center min-h-screen pt-20 px-8">
       {/* Container giới hạn chiều rộng */}
       <div className="flex w-full max-w-6xl gap-8 items-start">
         {/* Sidebar */}
@@ -15,7 +18,10 @@ const ProfilePage = () => {
 
         {/* Nội dung profile */}
         <div className="flex-1">
-          <UserProfile />
+          {activeTab === "info" && <UserProfile />}
+          {activeTab === "history" && <BookingHistory />}
+          {activeTab === "password" && <ChangePassword />}
+          {activeTab === "favorites" && <FavoriteMovies />}
         </div>
       </div>
     </div>

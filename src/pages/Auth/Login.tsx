@@ -5,13 +5,42 @@ import bgCinema from "@/assets/images/bg-cinema.jpg";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newErrors: { [key: string]: string } = {};
+    Object.entries(formData).forEach(([key, value]) => {
+      if (!value.trim()) newErrors[key] = "Vui lòng điền trường này.";
+    });
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    // Giả lập gọi API đăng nhập
+    console.log("Đăng nhập với:", formData);
+    alert("Đăng nhập thành công!");
+  };
 
   return (
     <div
       className="relative flex justify-center bg-cover bg-center bg-fixed"
       style={{ backgroundImage: `url(${bgCinema})` }}
     >
-      {/* Overlay tối nền (phủ toàn màn hình) */}
+      {/* Overlay tối nền */}
       <div className="absolute inset-0 bg-black/60 min-h-screen"></div>
 
       {/* Khung form */}
@@ -30,7 +59,7 @@ const Login: React.FC = () => {
         </div>
 
         {/* Form đăng nhập */}
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit} noValidate>
           {/* Tài khoản */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -39,10 +68,17 @@ const Login: React.FC = () => {
             </label>
             <input
               type="text"
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className={`mt-1 w-full border ${
+                errors.username ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
               placeholder="Nhập tài khoản"
-              required
             />
+            {errors.username && (
+              <p className="text-sm text-red-500 mt-1">{errors.username}</p>
+            )}
           </div>
 
           {/* Mật khẩu */}
@@ -53,18 +89,25 @@ const Login: React.FC = () => {
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
-                className="w-full border border-gray-300 rounded-md p-2.5 pr-10 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`w-full border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded-md p-2.5 pr-10 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
                 placeholder="Nhập mật khẩu"
-                required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEye /> : <FaEyeSlash/>}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+            )}
           </div>
 
           {/* Ghi nhớ + Quên mật khẩu */}
@@ -73,10 +116,7 @@ const Login: React.FC = () => {
               <input type="checkbox" className="mr-2 accent-yellow-400" />
               Lưu mật khẩu đăng nhập
             </label>
-            <Link 
-              to="/forgot-password"
-              className="text-blue-600 hover:underline"
-            >
+            <Link to="/forgot-password" className="text-blue-600 hover:underline">
               Quên mật khẩu?
             </Link>
           </div>

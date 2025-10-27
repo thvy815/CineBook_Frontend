@@ -9,8 +9,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   const [email, setEmail] = useState("vynguyen8105@gmail.com");
 
   return (
-    <div className="flex-1 bg-gray-900 text-white">
-      <h2 className="text-2xl font-bold mb-6">THÔNG TIN KHÁCH HÀNG</h2>
+    <div className="flex-1 text-white">
+      <h2 className="text-2xl font-bold mb-4 mt-3">THÔNG TIN KHÁCH HÀNG</h2>
       <div className="bg-white text-black p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-bold mb-4">Thông tin cá nhân</h3>
         <div className="grid grid-cols-2 gap-4">
@@ -51,9 +51,11 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             />
           </div>
         </div>
-        <button className="mt-6 bg-gray-200 text-black px-4 py-2 rounded font-bold">
-          LƯU THÔNG TIN
-        </button>
+        <div className="flex justify-end">
+            <button className="mt-6 bg-gray-200 text-black px-4 py-2 rounded-lg font-bold">
+              LƯU THÔNG TIN
+            </button>
+          </div>
       </div>
     </div>
   );

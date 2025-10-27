@@ -4,23 +4,49 @@ import bgCinema from "@/assets/images/bg-cinema.jpg";
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: "",
+    dateOfBirth: "",
+    gender: "",
     email: "",
     username: "",
     password: "",
+    confirmPassword: "",
     phoneNumber: "",
     nationalId: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (!value.trim()) newErrors[key] = "Vui lòng điền trường này";
+    });
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
+
     console.log("Register data:", formData);
+    alert("Đăng ký thành công!");
   };
 
   return (
@@ -31,9 +57,9 @@ const Register: React.FC = () => {
       {/* Overlay tối nền */}
       <div className="absolute inset-0 bg-black/60"></div>
 
-      {/* Nội dung có thể scroll */}
+      {/* Form đăng ký */}
       <div className="relative z-10 w-full max-w-md bg-[#ffffffee] rounded-md shadow-xl p-8 mt-24 mb-16">
-        {/* Tabs đăng nhập / đăng ký */}
+        {/* Tabs */}
         <div className="flex justify-center mb-6 space-x-8">
           <a
             href="/login"
@@ -46,7 +72,6 @@ const Register: React.FC = () => {
           </h2>
         </div>
 
-        {/* Form đăng ký */}
         <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Họ và tên */}
           <div>
@@ -58,26 +83,75 @@ const Register: React.FC = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+              className={`mt-1 w-full border ${
+                errors.fullName ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
               placeholder="Nhập họ và tên"
-              required
             />
+            {errors.fullName && (
+              <p className="text-sm text-red-500 mt-1">{errors.fullName}</p>
+            )}
           </div>
 
-          {/* Email */}
+          {/* Ngày sinh */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Email <span className="text-red-500">*</span>
+              Ngày sinh <span className="text-red-500">*</span>
             </label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type="date"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
               onChange={handleChange}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
-              placeholder="Nhập email"
-              required
+              className={`mt-1 w-full border ${
+                errors.dateOfBirth ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
             />
+            {errors.dateOfBirth && (
+              <p className="text-sm text-red-500 mt-1">{errors.dateOfBirth}</p>
+            )}
+          </div>
+
+          {/* Giới tính */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Giới tính <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className={`mt-1 w-full border ${
+                errors.gender ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
+            >
+              <option value="" disabled>-- Chọn giới tính --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+            {errors.gender && (
+              <p className="text-sm text-red-500 mt-1">{errors.gender}</p>
+            )}
+          </div>
+
+          {/* Số điện thoại */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Số điện thoại <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className={`mt-1 w-full border ${
+                errors.phoneNumber ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
+              placeholder="Nhập số điện thoại"
+            />
+            {errors.phoneNumber && (
+              <p className="text-sm text-red-500 mt-1">{errors.phoneNumber}</p>
+            )}
           </div>
 
           {/* Tên đăng nhập */}
@@ -90,10 +164,54 @@ const Register: React.FC = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+              className={`mt-1 w-full border ${
+                errors.username ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
               placeholder="Nhập tên đăng nhập"
-              required
             />
+            {errors.username && (
+              <p className="text-sm text-red-500 mt-1">{errors.username}</p>
+            )}
+          </div>
+
+          {/* CCCD */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              CCCD/CMND <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              name="nationalId"
+              value={formData.nationalId}
+              onChange={handleChange}
+              className={`mt-1 w-full border ${
+                errors.nationalId ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
+              placeholder="Nhập số CCCD/CMND"
+            />
+            {errors.nationalId && (
+              <p className="text-sm text-red-500 mt-1">{errors.nationalId}</p>
+            )}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`mt-1 w-full border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
+              placeholder="Nhập email"
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Mật khẩu */}
@@ -107,50 +225,53 @@ const Register: React.FC = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md p-2.5 pr-10 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+                className={`w-full border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded-md p-2.5 pr-10 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
                 placeholder="Nhập mật khẩu"
-                required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+            )}
           </div>
 
-          {/* Số điện thoại */}
+          {/* Xác nhận mật khẩu */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Số điện thoại <span className="text-red-500">*</span>
+              Xác nhận mật khẩu <span className="text-red-500">*</span>
             </label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
-              placeholder="Nhập số điện thoại"
-              required
-            />
-          </div>
-
-          {/* CCCD/CMND */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              CCCD/CMND <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="nationalId"
-              value={formData.nationalId}
-              onChange={handleChange}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
-              placeholder="Nhập số CCCD/CMND"
-              required
-            />
+            <div className="relative mt-1">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`w-full border ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                } rounded-md p-2.5 pr-10 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
+                placeholder="Nhập lại mật khẩu"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
 
           {/* Nút đăng ký */}
@@ -164,10 +285,7 @@ const Register: React.FC = () => {
           {/* Dòng “Đã có tài khoản?” */}
           <p className="text-center text-sm text-gray-700 mt-3">
             Đã có tài khoản?{" "}
-            <a
-              href="/login"
-              className="text-blue-600 font-medium hover:underline"
-            >
+            <a href="/login" className="text-blue-600 font-medium hover:underline">
               Đăng nhập ngay
             </a>
           </p>
