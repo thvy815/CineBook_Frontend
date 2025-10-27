@@ -17,7 +17,7 @@ import TrailerModal from "../../components/ui/TrailerModal";
 
 // Utils
 import { getPosterUrl } from "../../utils/getPosterUrl";
-import { formatTitle, formatSpokenLanguages, formatGenres } from "../../utils/format";
+import { formatTitle, formatSpokenLanguages, formatGenres, formatAge } from "../../utils/format";
 
 const images = [
   "https://images.spiderum.com/sp-images/8d5590c080e311ed8a6481196edc880f.jpeg",
@@ -144,7 +144,7 @@ const Home = () => {
                                     </p>
                                     <p className="text-xs font-light flex items-center">
                                       <ShieldAlert size={16} className="mr-2 text-red-500" />
-                                      {movie.age}
+                                      {formatAge(movie.age)}
                                     </p>
                                   </div>
                                 </div>
@@ -254,7 +254,7 @@ const Home = () => {
                                     </p>
                                     <p className="text-xs font-light flex items-center">
                                       <ShieldAlert size={16} className="mr-2 text-red-500" />
-                                      {movie.age}
+                                      {formatAge(movie.age)}
                                     </p>
                                   </div>
                                 </div>
@@ -310,6 +310,14 @@ const Home = () => {
               </div>
             </div>
           )}
+          <div className="flex justify-center mt-5">
+            <Link
+              to="/movies/upcoming"
+              className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+            >
+              Xem thêm
+            </Link>
+          </div>
 
                   </section>
       </div>

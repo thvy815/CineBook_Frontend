@@ -24,4 +24,47 @@ export function formatSpokenLanguages(langs: string[] | string | null | undefine
   else if (typeof langs === "string") arr = langs.split(",").map(s => s.trim());
 
   return arr.map(code => ISO6391.getName(code) || code).join(", ");
-}
+};
+
+// Format quốc gia sang tiếng Việt
+const countryMap: Record<string, string> = {
+  vn: "Việt Nam",
+  us: "Mỹ",
+  uk: "Anh",
+  fr: "Pháp",
+  jp: "Nhật Bản",
+  kr: "Hàn Quốc",
+  cn: "Trung Quốc",
+  id: "Indonesia",
+  th: "Thái Lan",
+  in: "Ấn Độ",
+  ph: "Philippines",
+  sg: "Singapore",
+  my: "Malaysia",
+  ca: "Canada",
+  de: "Đức",
+  it: "Ý",
+  es: "Tây Ban Nha"
+};
+
+export const formatCountry = (code: string | null | undefined): string => {
+  if (!code) return "N/A";
+  const lower = code.toLowerCase();
+  return countryMap[lower] || code.toUpperCase();
+};
+
+// Format độ tuổi: thêm dấu +
+export const formatAge = (age: string | number | null | undefined): string => {
+  if (!age) return "N/A";
+  return `${age}+`;
+};
+
+import dayjs from "dayjs";
+
+// 🗓️ Format ngày phát hành: dd/mm/yyyy
+export const formatDate = (dateString: string | null | undefined): string => {
+  if (!dateString) return "N/A";
+  const date = dayjs(dateString);
+  return date.isValid() ? date.format("DD/MM/YYYY") : "N/A";
+};
+
