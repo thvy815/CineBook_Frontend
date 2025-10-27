@@ -1,46 +1,41 @@
-// src/pages/Movie/components/CinemaCard.tsx
-import TimeGroup from "./TimeGroup";
-
-interface Showtime {
-    id: string;
-    time: string;
-    price: number;
-}
-
-interface Cinema {
-    id: string;
-    name: string;
-    address: string;
-    logoUrl: string;
-    showtimes: Showtime[];
-}
+import React from "react";
+import type { ShowTimeItem } from "../../../types/showtime";
 
 interface CinemaCardProps {
-    cinema: Cinema;
-    onSelectTime?: (showtime: Showtime) => void;
+  cinemaName: string;
+  showtimes: ShowTimeItem[];
+  selectedShowtimeId: string;
+  onSelectShowtime: (id: string) => void;
 }
 
-const CinemaCard = ({ cinema, onSelectTime }: CinemaCardProps) => {
-    return (
-        <div className="border p-4 rounded-lg flex gap-4 mb-6">
-            <img
-                src={cinema.logoUrl}
-                alt={cinema.name}
-                className="w-20 h-20 rounded object-contain"
-            />
-            <div className="flex-1">
-                <h3 className="text-lg font-bold">{cinema.name}</h3>
-                <p className="text-gray-500 text-sm">{cinema.address}</p>
+export default function CinemaCard({
+  cinemaName,
+  showtimes,
+  selectedShowtimeId,
+  onSelectShowtime,
+}: CinemaCardProps) {
+  return (
+    <div className="bg-gray-900 rounded-2xl border border-gray-700 hover:border-red-400 transition-all p-4">
+      {/* --- Tên rạp --- */}
+      <h3 className="text-xl font-semibold mb-4">{cinemaName}</h3>
 
-                <div className="mt-4">
-                    <TimeGroup
-                        times={cinema.showtimes}
-                        onSelect={(t) => onSelectTime?.(t)}
-                    />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default CinemaCard;
+      {/* --- Suất chiếu --- */}
+      <div className="flex flex-wrap gap-3">
+        {showtimes.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => onSelectShowtime(s.id)}
+            className={`px-4 py-2 rounded-lg text-sm transition-all
+              ${
+                selectedShowtimeId === s.id
+                  ? "border-2 border-red-500 bg-gray-800 text-white"
+                  : "border border-gray-600 hover:border-red-400 text-gray-300"
+              }`}
+          >
+            {s.time}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -6,8 +6,10 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Profile from "./pages/User/Profile";
-import ShowtimeList from './pages/Movie/ShowtimeList.tsx';
 import PromotionSelection from "./pages/Booking/PromotionSelection.tsx";
+import BookingPage from "./pages/Booking/BookingPage"; // ✅ Gộp Showtime + F&B
+import ShowtimeList from "./pages/Movie/ShowtimeList"; // ✅ nếu có
+import ShowtimePage from "./pages/Movie/ShowtimePage.tsx";
 function App() {
   return (
     <Router>
@@ -29,9 +31,13 @@ function App() {
           <Route path="/home" element={<BackgroundLayout> <Home /> </BackgroundLayout>} />
 
                   {/* Movie pages */}
-                  <Route path="/showtimes" element={<BackgroundLayout> <ShowtimeList /> </BackgroundLayout>} />
+                  <Route
+                    path="/showtimes" element={ <BackgroundLayout> <ShowtimeList /> </BackgroundLayout>}
+                  />
                   { /* Booking pages */}
                   <Route path="/promotions" element={<BackgroundLayout> <PromotionSelection /> </BackgroundLayout>} />
+
+                  <Route path="/showtime" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} />
         </Routes>
       </Layout>
     </Router>

@@ -10,7 +10,7 @@ interface Props {
 
 const DateDropdown: React.FC<Props> = ({ options, value, onChange, label = "1. Ngày" }) => {
     return (
-        <div className="flex-1 min-w-[220px] border border-gray-500 rounded-lg p-4 bg-[#0B0F19]">
+        <div className="flex-1 min-w-[220px] border border-gray-500 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3 text-yellow-400 font-bold text-lg">
                 <span>{label}</span>
                 {/* you can replace with svg/icon */}

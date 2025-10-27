@@ -1,13 +1,14 @@
 ﻿// src/services/showtimeService.ts
 import type { ShowTimeItem } from "../../types/showtime";
 
+
 const MOCK: ShowTimeItem[] = [
-    { id: "1", movieId: "m1", movieTitle: "Avengers", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-01-01", time: "08:50", price: 90000 },
-    { id: "2", movieId: "m1", movieTitle: "Avengers", cinemaId: "c2", cinemaName: "Galaxy Nguyễn Du", date: "2025-01-01", time: "11:10", price: 90000 },
-    { id: "3", movieId: "m2", movieTitle: "Spider-Man", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-01-01", time: "09:40", price: 85000 },
-    { id: "4", movieId: "m2", movieTitle: "Spider-Man", cinemaId: "c3", cinemaName: "BHD Bitexco", date: "2025-01-02", time: "16:20", price: 95000 },
-    { id: "5", movieId: "m3", movieTitle: "Batman", cinemaId: "c2", cinemaName: "Galaxy Nguyễn Du", date: "2025-01-02", time: "14:20", price: 80000 },
-    { id: "6", movieId: "m1", movieTitle: "Avengers", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-01-02", time: "13:30", price: 90000 },
+    { id: "1", movieId: "m1", movieTitle: "Avengers", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-10-28", time: "08:50", price: 90000,     posterUrl: "https://images.spiderum.com/sp-images/8d5590c080e311ed8a6481196edc880f.jpeg", genre: "", duration: "", province:"Huế"},
+    { id: "2", movieId: "m1", movieTitle: "Avengers", cinemaId: "c2", cinemaName: "Galaxy Nguyễn Du", date: "2025-10-28", time: "11:10", price: 90000, posterUrl:  "https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/176175/Originals/poster-film-5.jpg", genre: "", duration: "", province: "Đà Nẵng" },
+    { id: "3", movieId: "m2", movieTitle: "Spider-Man", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-10-29", time: "09:40", price: 85000, posterUrl:  "https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/176175/Originals/poster-film-5.jpg", genre: "", duration: "", province:"Huế" },
+    { id: "4", movieId: "m2", movieTitle: "Spider-Man", cinemaId: "c3", cinemaName: "BHD Bitexco", date: "2025-10-30", time: "16:20", price: 95000, posterUrl:  "https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/176175/Originals/poster-film-5.jpg", genre: "", duration: "", province:"HCM"},
+    { id: "5", movieId: "m3", movieTitle: "Batman", cinemaId: "c2", cinemaName: "Galaxy Nguyễn Du", date: "2025-10 -28", time: "14:20", price: 80000, posterUrl:  "https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/176175/Originals/poster-film-5.jpg", genre: "", duration: "", province:"Hà Nội"},
+    { id: "6", movieId: "m1", movieTitle: "Avengers", cinemaId: "c1", cinemaName: "CGV Vincom", date: "2025-10-29", time: "13:30", price: 90000, posterUrl: "https://www.pinterest.com/pin/657807089333682222/", genre: "", duration: "", province:"HCM" },
     // add more rows as needed
 ];
 

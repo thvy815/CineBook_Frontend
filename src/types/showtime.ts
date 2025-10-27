@@ -5,7 +5,11 @@ export interface ShowTimeItem {
     movieTitle: string;
     cinemaId: string;
     cinemaName: string;
-    date: string; // ISO yyyy-mm-dd
-    time: string; // "14:30"
+    date: string; 
+    time: string; 
     price: number;
+    posterUrl?: string; 
+    genre: string;
+    duration: string;
+    province: string;
 }
