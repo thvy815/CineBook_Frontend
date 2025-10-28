@@ -9,6 +9,9 @@ import Profile from "./pages/User/ProfilePage";
 import NowPlayingMovie from "./pages/Movie/NowPlayingMovie";
 import UpcomingMovie from "./pages/Movie/UpcomingMovie";
 import MovieDetail from "./pages/Movie/MovieDetail";
+import PromotionSelection from "./pages/Booking/PromotionSelection.tsx";
+import BookingPage from "./pages/Booking/BookingPage"; 
+import ShowtimeList from "./pages/Movie/ShowtimeList"; 
 
 function App() {
   return (
@@ -34,7 +37,13 @@ function App() {
           <Route path="/movies/:id" element={<BackgroundLayout> <MovieDetail /> </BackgroundLayout>} />
           <Route path="/movies/now-playing" element={<BackgroundLayout> <NowPlayingMovie /> </BackgroundLayout>} />
           <Route path="/movies/upcoming" element={<BackgroundLayout> <UpcomingMovie /> </BackgroundLayout>} />
-
+          
+          {/* Showtime pages */}
+          <Route path="/showtimes" element={ <BackgroundLayout> <ShowtimeList /> </BackgroundLayout>} />
+                  
+          { /* Booking pages */}
+          <Route path="/promotions" element={<BackgroundLayout> <PromotionSelection /> </BackgroundLayout>} />
+          <Route path="/showtime" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} />
         </Routes>
       </Layout>
     </Router>
