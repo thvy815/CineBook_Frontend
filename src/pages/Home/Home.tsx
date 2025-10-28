@@ -1,4 +1,3 @@
-import Layout from "../../components/layout/Layout";
 import { ChevronLeft, ChevronRight, MapPin, Clock, Globe, ShieldAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -34,7 +33,7 @@ const Home = () => {
   // Banner carousel
   const { currentIndex, prevSlide, nextSlide } = useBannerCarousel(images.length, 5000);
 
-  // ✅ Fetch movie data (CHỈ PHẦN NÀY ĐÃ ĐƯỢC SỬA)
+  // Fetch movie data (CHỈ PHẦN NÀY ĐÃ ĐƯỢC SỬA)
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -67,10 +66,10 @@ const Home = () => {
 
   return (
     
-      <div className="w-full min-h-screen pb-16">
+      <div className="w-full min-h-screen pb-16 pt-10">
         {/* ---------------- BANNER ---------------- */}
         <div className="relative w-full">
-          <section className="w-full max-w-5xl mx-auto aspect-[16/6] overflow-hidden rounded-sm shadow-lg">
+          <section className="w-full max-w-5xl mx-auto aspect-[16/6] overflow-hidden rounded-lg shadow-lg">
             <div
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -125,7 +124,7 @@ const Home = () => {
                                 <img
                                   src={getPosterUrl(movie.posterUrl)}
                                   alt={movie.title}
-                                  className="w-full h-[400px] object-cover object-cover transition-transform duration-300 transform group-hover:scale-105"
+                                  className="w-full h-[400px] object-cover transition-transform duration-300 transform group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
                                   <div className="text-white text-left">
@@ -235,7 +234,7 @@ const Home = () => {
                                 <img
                                   src={getPosterUrl(movie.posterUrl)}
                                   alt={movie.title}
-                                  className="w-full h-[400px] object-cover object-cover transition-transform duration-300 transform group-hover:scale-105"
+                                  className="w-full h-[400px] object-cover transition-transform duration-300 transform group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
                                   <div className="text-white text-left">

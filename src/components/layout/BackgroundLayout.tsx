@@ -14,7 +14,7 @@ const BackgroundLayout: React.FC<BackgroundLayoutProps> = ({ children }) => {
         backgroundImage: `url(${backgroundImg})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        backgroundAttachment: "fixed",
+        backgroundAttachment: "scroll",
         backgroundPosition: "center",
       }}
     >

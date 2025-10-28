@@ -29,8 +29,8 @@ const Header = () => {
           <Link to="/promotions" className="hover:text-yellow-400 transition">
             Khuyến mãi
           </Link>
-          <Link to="/contact" className="hover:text-yellow-400 transition">
-            Liên hệ
+          <Link to="/profile" className="hover:text-yellow-400 transition">
+            Tài khoản
           </Link>
         </nav>
 
