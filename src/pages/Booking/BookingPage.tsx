@@ -7,12 +7,29 @@ import BookingSummaryCard from "../../components/shared/FnBItem/BookingSummaryCa
 import { fnbService } from "../../services/fnbitem/fnbService";
 
 import TicketSelection from "./TicketSelection";
-import SeatMapPage from "../../pages/Booking/SeatMapPage"
+import SeatMapPage from "../../pages/Booking/SeatMapPage";
+import { showtimeService, getDistinctDates, getDistinctMovies, getDistinctCinemas, filterShowtimes } from "../../services/showtime/showtimeService";
 
 export default function BookingPage() {
   const location = useLocation();
   const showtime = (location.state as { showtime: ShowTimeItem })?.showtime;
   const roomId = showtime?.roomId;
+
+  /** ----- STATE SHOWTIMES ----- */
+  const [allShowtimes, setAllShowtimes] = useState<ShowTimeItem[]>([]);
+
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+      try {
+        const data = await showtimeService.getAllShowtimes();
+        setAllShowtimes(data);
+      } catch (err) {
+        console.error("Không thể lấy danh sách suất chiếu:", err);
+      }
+    };
+    fetchShowtimes();
+  }, []);
+
   if (!showtime || !roomId) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-300">
@@ -119,7 +136,7 @@ export default function BookingPage() {
           userId={currentUser.id}
           remainingTickets={totalSeatsNeeded}
           selectedSeats={selectedSeats}
-          setSelectedSeats={setSelectedSeats} // truyền callback để BookingPage quản lý state
+          setSelectedSeats={setSelectedSeats}
         />
       </div>
 
