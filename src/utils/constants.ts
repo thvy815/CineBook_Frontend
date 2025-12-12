@@ -1,18 +1,18 @@
 // src/utils/constants.ts
 
 // 💡 URL backend — bạn thay bằng URL thật của bạn
-export const API_BASE_URL = "http://localhost:8080/api";
+export const API_BASE_URL = "https://localhost:7156";
 
 // ===== SHOWTIME =====
 export const SHOWTIME_ENDPOINT = {
   ticketTypes: (showtimeId: string) =>
-    `${API_BASE_URL}/showtime/${showtimeId}/ticket-types`,
+    `${API_BASE_URL}/Showtime/${showtimeId}/ticket-types`,
 
   seats: (showtimeId: string) =>
-    `${API_BASE_URL}/showtime/${showtimeId}/seats`,
+    `${API_BASE_URL}/Showtime/${showtimeId}/seats`,
 
   info: (showtimeId: string) =>
-    `${API_BASE_URL}/showtime/${showtimeId}`,
+    `${API_BASE_URL}/Showtime/${showtimeId}`,
 };
 
 // ===== BOOKING =====
@@ -44,11 +44,31 @@ export const ENDPOINTS = {
 // src/utils/constants.ts
 export const SHOWTIME_ENDPOINTS = {
   SHOWTIME: {
-    GET_ALL: "/showtime",
-    GET_BY_ID: (id: string) => `/showtime/${id}`,
-    CREATE: "/showtime",
-    UPDATE: (id: string) => `/showtime/${id}`,
-    DELETE: (id: string) => `/showtime/${id}`,
+    GET_ALL: `${API_BASE_URL}/api/Showtime`,
+    GET_BY_ID: (id:string) => `${API_BASE_URL}/Showtime/${id}`,
+    CREATE: `${API_BASE_URL}/api/Showtime`,
+    UPDATE: (id: string) => `${API_BASE_URL}/Showtime/${id}`,
+    DELETE: (id: string) => `${API_BASE_URL}/Showtime/${id}`,
+    FILTER: `${API_BASE_URL}/api/Showtime/filter`,
+    GENERATE: `${API_BASE_URL}/api/Showtime/generate-auto`,
   },
-  // seat / seat-lock ... như cũ
 };
+
+export const THEATER_ENDPOINTS = {
+  THEATER: {
+    GET_ALL: `${API_BASE_URL}/api/Theater`,
+    CREATE: `${API_BASE_URL}/api/Theater`,
+    UPDATE: (id: string) => `${API_BASE_URL}/api/Theater/${id}`,
+  },
+};
+
+export const SEAT_ENDPOINTS = {
+  GET_BY_ROOM: (roomId: string) => `${API_BASE_URL}/api/Seat/${roomId}`,
+  CREATE: `${API_BASE_URL}/api/Seat`,
+};
+
+export const BOOKING_ENDPOINTS = {
+  HOLD_SEATS: `${API_BASE_URL}/api/Booking/hold-seats`,
+  CONFIRM: `${API_BASE_URL}/api/Booking/confirm`,
+};
+

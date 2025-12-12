@@ -3,10 +3,10 @@ import ComboCard from "../../components/shared/FnBItem/ComboCard";
 import DrinkCard from "../../components/shared/FnBItem/DrinkCard";
 import type { FnBItem } from "../../types/fnb_item";
 import { fnbService } from "../../services/fnbitem/fnbService";
-import type { ShowTimeItem } from "../../types/showtime";
+import type { ShowtimeItem } from "../../types/showtime";
 
 type Props = {
-  showtime: ShowTimeItem;
+  showtime: ShowtimeItem;
   quantities: { [key: string]: number };
   onIncrease: (key: string) => void;
   onDecrease: (key: string) => void;

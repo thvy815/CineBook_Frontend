@@ -10,7 +10,7 @@ import NowPlayingMovie from "./pages/Movie/NowPlayingMovie";
 import UpcomingMovie from "./pages/Movie/UpcomingMovie";
 import MovieDetail from "./pages/Movie/MovieDetail";
 import PromotionSelection from "./pages/Booking/PromotionSelection.tsx";
-import BookingPage from "./pages/Booking/BookingPage"; 
+//import BookingPage from "./pages/Booking/BookingPage"; 
 import ShowtimeList from "./pages/Movie/ShowtimeList"; 
 
 function App() {
@@ -43,7 +43,7 @@ function App() {
                   
           { /* Booking pages */}
           <Route path="/promotions" element={<BackgroundLayout> <PromotionSelection /> </BackgroundLayout>} />
-          <Route path="/booking" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} />
+          {/* <Route path="/booking" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} /> */}
         </Routes>
       </Layout>
     </Router>

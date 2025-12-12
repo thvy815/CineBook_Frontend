@@ -1,89 +1,119 @@
-import { useEffect, useState, useMemo } from "react";
-import type { ShowTimeItem } from "../../types/showtime";
-import { getAllShowtimes, getDistinctDates, getDistinctMovies, getDistinctCinemas, filterShowtimes } from "../../services/showtime/showtimeService";
+import { useEffect, useState } from "react";
+import { showtimeService } from "../../services/showtime/showtimeService";
+import type { ShowtimeItem } from "../../types/showtime";
+
+// Lấy 3 ngày gần nhất
+const getNext3Days = () => {
+  const result: string[] = [];
+  const today = new Date();
+
+  for (let i = 0; i < 3; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+
+    result.push(`${yyyy}-${mm}-${dd}`);
+  }
+  return result;
+};
 
 export const useShowtimeSelector = () => {
-  const [all, setAll] = useState<ShowTimeItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allShowtimes, setAllShowtimes] = useState<ShowtimeItem[]>([]);
+  const [allTheaters, setAllTheaters] = useState<{ id: string; name: string }[]>([]);
+  const [allMovies, setAllMovies] = useState<{ id: string; title: string }[]>([]);
+  const [dates, setDates] = useState<string[]>(getNext3Days());
+  const [times, setTimes] = useState<string[]>([]);
 
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedMovieId, setSelectedMovieId] = useState<string>("");
-  const [selectedCinemaId, setSelectedCinemaId] = useState<string>("");
+  // Selections
+  const [selectedTheaterId, setSelectedTheaterId] = useState("");
+  const [selectedMovieId, setSelectedMovieId] = useState("");
+  const [selectedDate, setSelectedDate] = useState(dates[0]);
+  const [selectedTime, setSelectedTime] = useState("");
 
+  // Hiển thị tên
+  const selectedTheater = allTheaters.find(t => t.id === selectedTheaterId)?.name || "";
+  const selectedMovie = allMovies.find(m => m.id === selectedMovieId)?.title || "";
+
+  // -----------------------------------------------------
+  // Load danh sách rạp ban đầu
+  // -----------------------------------------------------
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    getAllShowtimes().then((data) => {
-      if (!mounted) return;
-      setAll(data);
-      setLoading(false);
-    });
-    return () => { mounted = false; };
+    const loadTheaters = async () => {
+      const theaterList = await showtimeService.getAllTheater();
+      setAllTheaters(theaterList.map((t: any) => ({ id: t.id, name: t.name })));
+    };
+    loadTheaters();
   }, []);
 
-  // Tính toán các showtimes dựa trên selection hiện tại
-  const filtered = useMemo(() => 
-    filterShowtimes(all, {
-      date: selectedDate || undefined,
-      movieId: selectedMovieId || undefined,
-      cinemaId: selectedCinemaId || undefined
-    }),
-    [all, selectedDate, selectedMovieId, selectedCinemaId]
-  );
+  // -----------------------------------------------------
+  // Load showtime dựa trên filter (theaterId, movieId, date)
+  // -----------------------------------------------------
+ useEffect(() => {
+  const fetchShowtimes = async () => {
+    try {
+      const filter: any = {};
+      if (selectedTheaterId) filter.theaterId = selectedTheaterId;
+      if (selectedMovieId) filter.movieId = selectedMovieId;
+      if (selectedDate) filter.date = selectedDate;
 
-  // Các dropdown options dựa trên selections còn lại
-  const availableDates = useMemo(() =>
-    getDistinctDates(filterShowtimes(all, { movieId: selectedMovieId || undefined, cinemaId: selectedCinemaId || undefined })),
-    [all, selectedMovieId, selectedCinemaId]
-  );
+      const response = await showtimeService.getByFilter(filter);
 
-  const availableMovies = useMemo(() =>
-    getDistinctMovies(filterShowtimes(all, { date: selectedDate || undefined, cinemaId: selectedCinemaId || undefined })),
-    [all, selectedDate, selectedCinemaId]
-  );
+      // Chuẩn hóa dữ liệu
+      const data = Array.isArray(response) ? response : response.showtimes ?? [];
+      setAllShowtimes(data);
 
-  const availableCinemas = useMemo(() =>
-    getDistinctCinemas(filterShowtimes(all, { date: selectedDate || undefined, movieId: selectedMovieId || undefined })),
-    [all, selectedDate, selectedMovieId]
-  );
+      // Lấy danh sách phim từ showtimes
+      const movieSet = new Map<string, string>();
+      data.forEach((st: ShowtimeItem) => {
+        if (!movieSet.has(st.movieId)) movieSet.set(st.movieId, st.movieTitle);
+      });
+      setAllMovies([...movieSet.entries()].map(([id, title]) => ({ id, title })));
 
-  // Helper để reset selection nếu không còn hợp lệ
-  const safeSetSelection = (
-    type: "date" | "movie" | "cinema",
-    value: string
-  ) => {
-    switch (type) {
-      case "date":
-        setSelectedDate(value);
-        if (selectedMovieId && !filterShowtimes(all, { date: value, movieId: selectedMovieId }).length) setSelectedMovieId("");
-        if (selectedCinemaId && !filterShowtimes(all, { date: value, cinemaId: selectedCinemaId }).length) setSelectedCinemaId("");
-        break;
-      case "movie":
-        setSelectedMovieId(value);
-        if (selectedDate && !filterShowtimes(all, { date: selectedDate, movieId: value }).length) setSelectedDate("");
-        if (selectedCinemaId && !filterShowtimes(all, { movieId: value, cinemaId: selectedCinemaId }).length) setSelectedCinemaId("");
-        break;
-      case "cinema":
-        setSelectedCinemaId(value);
-        if (selectedDate && !filterShowtimes(all, { date: selectedDate, cinemaId: value }).length) setSelectedDate("");
-        if (selectedMovieId && !filterShowtimes(all, { movieId: selectedMovieId, cinemaId: value }).length) setSelectedMovieId("");
-        break;
+    } catch (err) {
+      console.error("Lỗi fetch showtimes:", err);
+      setAllShowtimes([]);
+      setAllMovies([]);
     }
   };
 
+  fetchShowtimes();
+}, [selectedTheaterId, selectedMovieId, selectedDate]);
+
+  // -----------------------------------------------------
+  // Khi thay đổi ngày / phim / rạp → cập nhật giờ
+  // -----------------------------------------------------
+  useEffect(() => {
+  let filteredTimes = allShowtimes;
+
+  if (selectedTheaterId) filteredTimes = filteredTimes.filter(st => st.theaterId === selectedTheaterId);
+  if (selectedMovieId) filteredTimes = filteredTimes.filter(st => st.movieId === selectedMovieId);
+  if (selectedDate) filteredTimes = filteredTimes.filter(st => st.date === selectedDate);
+
+  const timeSet = new Set(filteredTimes.map(st => st.startTime.substring(0, 5)));
+  setTimes([...timeSet]);
+}, [allShowtimes, selectedTheaterId, selectedMovieId, selectedDate]);
+
   return {
-    loading,
-    all,
+    allTheaters,
+    allMovies,
+    dates,
+    times,
+
+    selectedTheater,
+    selectedMovie,
     selectedDate,
+    selectedTime,
+    selectedTheaterId,
     selectedMovieId,
-    selectedCinemaId,
-    availableDates,
-    availableMovies,
-    availableCinemas,
-    showtimesResult: filtered,
-    onSelectDate: (date: string) => safeSetSelection("date", date),
-    onSelectMovie: (movieId: string) => safeSetSelection("movie", movieId),
-    onSelectCinema: (cinemaId: string) => safeSetSelection("cinema", cinemaId),
-    clearAll: () => { setSelectedDate(""); setSelectedMovieId(""); setSelectedCinemaId(""); }
+
+    setSelectedTheaterId,
+    setSelectedMovieId,
+    setSelectedDate,
+    setSelectedTime,
+
+    allShowtimes
   };
 };

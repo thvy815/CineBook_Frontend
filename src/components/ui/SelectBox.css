@@ -1,0 +1,27 @@
+.selectbox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.selectbox-label {
+    color: #ffd43b;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.selectbox-wrapper {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.selectbox-input {
+    width: 250px;
+    padding: 10px 12px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: white;
+}
