@@ -12,4 +12,5 @@ export interface ShowTimeItem {
     genre: string;
     duration: string;
     province: string;
+    roomId: string;
 }

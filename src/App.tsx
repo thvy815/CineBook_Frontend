@@ -43,7 +43,7 @@ function App() {
                   
           { /* Booking pages */}
           <Route path="/promotions" element={<BackgroundLayout> <PromotionSelection /> </BackgroundLayout>} />
-          <Route path="/showtime" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} />
+          <Route path="/booking" element={<BackgroundLayout> <BookingPage/> </BackgroundLayout>} />
         </Routes>
       </Layout>
     </Router>

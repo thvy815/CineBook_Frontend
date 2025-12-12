@@ -1,0 +1,29 @@
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(10, 40px);
+    gap: 8px;
+}
+
+.seat {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #d0d0d0;
+}
+
+.seat.locked {
+    background: #ffbb33;
+    cursor: not-allowed;
+}
+
+.seat.booked {
+    background: #ff3333;
+    cursor: not-allowed;
+    color: white;
+}
+
+.seat.available:hover {
+    background: #8dd38d;
+}

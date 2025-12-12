@@ -22,8 +22,8 @@ export default function FNBSelection({
   const drinks: FnBItem[] = fnbService.getDrinks();
 
   return (
-    <div className="text-white text-center">
-      <h1 className="text-4xl font-extrabold mb-8 text-center tracking-widest">
+    <div className="text-white">
+      <h1 className="text-4xl font-extrabold mb-8 tracking-widest">
       CHỌN BẮP NƯỚC
       </h1>
       {/* --- COMBO SECTION --- */}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import {
   getAllShowtimes,
   filterShowtimes,
@@ -7,10 +6,11 @@ import {
 import type { ShowTimeItem } from "../../types/showtime";
 import DateCard from "../../components/shared/ShowTime/DateCard";
 
-export default function ShowtimePage() {
-  const location = useLocation();
-  const showtime = (location.state as { showtime: ShowTimeItem })?.showtime;
+interface ShowtimePageProps {
+  showtime: ShowTimeItem;
+}
 
+export default function ShowtimePage({ showtime }: ShowtimePageProps) {
   const [allShowtimes, setAllShowtimes] = useState<ShowTimeItem[]>([]);
   const [days, setDays] = useState<Date[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -96,12 +96,10 @@ export default function ShowtimePage() {
 
   return (
     <div className="min-h-screen text-white px-6 py-8 flex flex-col items-center">
-      {/* --- Tiêu đề --- */}
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-widest">
         LỊCH CHIẾU
       </h1>
 
-      {/* --- Card chọn ngày --- */}
       <div className="flex gap-5 mb-8 justify-center">
         {days.map((d) => (
           <DateCard
@@ -113,7 +111,6 @@ export default function ShowtimePage() {
         ))}
       </div>
 
-      {/* --- Dropdown tỉnh --- */}
       <div className="flex justify-between items-center w-full max-w-5xl mb-8">
         <h2 className="text-2xl font-semibold tracking-wide">Danh sách rạp</h2>
         <select
@@ -130,7 +127,6 @@ export default function ShowtimePage() {
         </select>
       </div>
 
-      {/* --- Danh sách rạp + suất chiếu --- */}
       <div className="w-full max-w-5xl">
         {selectedProvince ? (
           Object.keys(groupedCinemas).length > 0 ? (
