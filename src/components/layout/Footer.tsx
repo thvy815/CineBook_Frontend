@@ -45,7 +45,7 @@ const Footer = () => {
 
         {/* Cột: CineHub */}
         <div>
-          <h3 className="text-lg font-bold text-white mb-4">🍿 CineHub</h3>
+          <h3 className="text-lg font-bold text-white mb-4">🍿 CineBook</h3>
           <ul className="space-y-2 text-sm">
             <li><a href="/about" className="hover:text-yellow-400 transition">Giới thiệu</a></li>
             <li><a href="/promotion" className="hover:text-yellow-400 transition">Khuyến mãi</a></li>

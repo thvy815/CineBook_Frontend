@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import bgCinema from "@/assets/images/bg-cinema.jpg";
+import { authService } from "../../services/auth/authService";
+import { useAuth } from "./../../context/AuthContext";
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    identifier: "",
     password: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -18,21 +23,33 @@ const Login: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const newErrors: { [key: string]: string } = {};
+  const newErrors: { [key: string]: string } = {};
     Object.entries(formData).forEach(([key, value]) => {
       if (!value.trim()) newErrors[key] = "Vui lòng điền trường này.";
     });
 
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
 
-    // Giả lập gọi API đăng nhập
-    console.log("Đăng nhập với:", formData);
-    alert("Đăng nhập thành công!");
+    try {
+      const res = await authService.login({
+        identifier: formData.identifier, // BE login bằng Email, username hoặc phoneNumber
+        password: formData.password,
+      });
+
+      // Lưu token + user vào localStorage
+      localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("refreshToken", res.refreshToken);
+      setUser(res.user);
+      localStorage.setItem("user", JSON.stringify(res.user));
+
+      navigate("/"); // chuyển về trang chủ
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Sai tài khoản hoặc mật khẩu");
+    }
   };
 
   return (
@@ -68,16 +85,16 @@ const Login: React.FC = () => {
             </label>
             <input
               type="text"
-              name="username"
-              value={formData.username}
+              name="identifier"
+              value={formData.identifier}
               onChange={handleChange}
               className={`mt-1 w-full border ${
-                errors.username ? "border-red-500" : "border-gray-300"
+                errors.identifier ? "border-red-500" : "border-gray-300"
               } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
               placeholder="Nhập tài khoản"
             />
-            {errors.username && (
-              <p className="text-sm text-red-500 mt-1">{errors.username}</p>
+            {errors.identifier && (
+              <p className="text-sm text-red-500 mt-1">{errors.identifier}</p>
             )}
           </div>
 

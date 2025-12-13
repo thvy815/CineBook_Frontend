@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import bgCinema from "@/assets/images/bg-cinema.jpg";
+import { authService } from "../../services/auth/authService";
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
-    dateOfBirth: "",
-    gender: "",
     email: "",
     username: "",
     password: "",
     confirmPassword: "",
-    phoneNumber: "",
-    nationalId: "",
+    phoneNumber: ""
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -40,13 +41,29 @@ const Register: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
-    console.log("Register data:", formData);
-    alert("Đăng ký thành công!");
+    try {
+      const payload = {
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+        fullname: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+      };
+
+      const res = await authService.register(payload);
+
+      // Lưu token
+      localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("refreshToken", res.refreshToken);
+
+      navigate("/login"); // chuyển đến trang đăng nhập
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Đăng ký thất bại");
+    }
   };
 
   return (
@@ -93,47 +110,6 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Ngày sinh */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Ngày sinh <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
-              onChange={handleChange}
-              className={`mt-1 w-full border ${
-                errors.dateOfBirth ? "border-red-500" : "border-gray-300"
-              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
-            />
-            {errors.dateOfBirth && (
-              <p className="text-sm text-red-500 mt-1">{errors.dateOfBirth}</p>
-            )}
-          </div>
-
-          {/* Giới tính */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Giới tính <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className={`mt-1 w-full border ${
-                errors.gender ? "border-red-500" : "border-gray-300"
-              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
-            >
-              <option value="" disabled>-- Chọn giới tính --</option>
-              <option value="Nam">Nam</option>
-              <option value="Nữ">Nữ</option>
-            </select>
-            {errors.gender && (
-              <p className="text-sm text-red-500 mt-1">{errors.gender}</p>
-            )}
-          </div>
-
           {/* Số điện thoại */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -171,26 +147,6 @@ const Register: React.FC = () => {
             />
             {errors.username && (
               <p className="text-sm text-red-500 mt-1">{errors.username}</p>
-            )}
-          </div>
-
-          {/* CCCD */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              CCCD/CMND <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              name="nationalId"
-              value={formData.nationalId}
-              onChange={handleChange}
-              className={`mt-1 w-full border ${
-                errors.nationalId ? "border-red-500" : "border-gray-300"
-              } rounded-md p-2.5 text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none`}
-              placeholder="Nhập số CCCD/CMND"
-            />
-            {errors.nationalId && (
-              <p className="text-sm text-red-500 mt-1">{errors.nationalId}</p>
             )}
           </div>
 
