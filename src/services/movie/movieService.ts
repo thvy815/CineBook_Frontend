@@ -1,28 +1,9 @@
 import axios from "axios";
-
-// ================== Interfaces ==================
-export interface MovieDetail {
-  id?: string;
-  tmdbId?: number;
-  title: string;
-  age: string;
-  genres: string[];
-  time: number;
-  country: string;
-  spokenLanguages: string[];
-  crew: string[];
-  cast: string[];
-  releaseDate: string;
-  overview: string;
-  trailer: string;
-  posterUrl: string;
-  status: string;
-}
+import type { MovieDetail } from "../../types/movie";
 
 // ================== API Client ==================
 const movieClient = axios.create({
   baseURL: "https://localhost:7194/api/moviehome",
-  
   headers: { "Content-Type": "application/json" },
 });
 const DETAIL_URL = "https://localhost:7194/api/moviedetail";

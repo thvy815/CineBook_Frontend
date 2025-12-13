@@ -1,12 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Layout from "../../components/layout/Layout";
 import { getPosterUrl } from "../../utils/getPosterUrl";
 import { formatCountry, formatAge, formatDate } from "../../utils/format";
-
-
-// Import service
-import { movieService, type MovieDetail } from "../../services/movie/movieService";
+import { movieService } from "../../services/movie/movieService";
+import type { MovieDetail } from "../../types/movie";
+import ShowtimeSection from "../../components/showtime/ShowtimeSelection";
 
 export default function MovieDetail() {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +12,7 @@ export default function MovieDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Lấy thông tin phim từ backend
+  // Lấy thông tin phim 
   useEffect(() => {
     if (!id) return;
     const fetchMovie = async () => {
@@ -32,30 +30,25 @@ export default function MovieDetail() {
     fetchMovie();
   }, [id]);
 
+  // Loading
   if (loading)
     return (
-      <Layout>
         <div className="text-center text-white mt-20">Đang tải...</div>
-      </Layout>
     );
 
+  // Error
   if (error)
     return (
-      <Layout>
         <div className="text-center text-red-400 mt-20">{error}</div>
-      </Layout>
     );
 
+  // Nếu không tìm thấy phim
   if (!movie)
     return (
-      <Layout>
         <div className="text-center text-gray-400 mt-20">Không tìm thấy phim.</div>
-      </Layout>
     );
 
-  // === Hiển thị chi tiết phim ===
   return (
-    
       <main className="max-w-6xl mx-auto px-4 text-white pt-20 md:pt-24 pb-10">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Poster */}
@@ -69,38 +62,47 @@ export default function MovieDetail() {
 
           {/* Thông tin phim */}
           <div className="flex-1 flex flex-col">
+            {/* Tên phim */}
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">
               {movie.title}
             </h1>
-            <div className="space-y-2 text-sm md:text-base">
+            <div className="space-y-2 text-base md:text-lg">
+              {/* Thể loại */}
               <p>
                 <span className="font-bold">🎭 Thể loại:</span>{" "}
                 {Array.isArray(movie.genres)
                     ? movie.genres.join(", ")
                     : movie.genres || "N/A"}
-                </p>
+              </p>
 
+              {/* Thời lượng */}
               <p><span className="font-bold">⏱ Thời lượng:</span> {movie.time}’</p>
+
+              {/* Ngôn ngữ */}
               <p>
                 <span className="font-bold">🗣 Ngôn ngữ:</span>{" "}
                 {Array.isArray(movie.spokenLanguages)
                     ? movie.spokenLanguages.join(", ")
                     : movie.spokenLanguages || "N/A"}
-                </p>
+              </p>
 
+              {/* Quốc gia*/}
               <p>
                 <span className="font-bold">🌍 Quốc gia:</span>{" "}
                 {formatCountry(movie.country)}
-                </p>
-                <p>
+              </p>
+
+              {/* Độ tuổi */}
+              <p>
                 <span className="font-bold">🔞 Độ tuổi:</span>{" "}
                 {formatAge(movie.age)}
-                </p>
+              </p>
 
+              {/* Ngày phát hành */}
               <p>
                 <span className="font-bold">📅 Ngày phát hành:</span>{" "}
                 {formatDate(movie.releaseDate)}
-                </p>
+              </p>
             </div>
 
             {/* Nội dung phim */}
@@ -112,7 +114,7 @@ export default function MovieDetail() {
             {/* Đạo diễn */}
             {movie.crew && (
             <div className="mt-6">
-                <h2 className="text-lg md:text-xl font-semibold mb-2">🎬 Đạo diễn</h2>
+                <h2 className="text-lg md:text-xl font-bold mb-2">🎬 Đạo diễn</h2>
                 <p>
                 {Array.isArray(movie.crew)
                     ? movie.crew.join(", ")
@@ -124,7 +126,7 @@ export default function MovieDetail() {
             {/* Diễn viên */}
             {movie.cast && (
             <div className="mt-6">
-                <h2 className="text-lg md:text-xl font-semibold mb-2">⭐ Diễn viên</h2>
+                <h2 className="text-lg md:text-xl font-bold mb-2">⭐ Diễn viên</h2>
                 <p>
                 {Array.isArray(movie.cast)
                     ? movie.cast.join(", ")
@@ -133,11 +135,10 @@ export default function MovieDetail() {
             </div>
             )}
 
-
             {/* Trailer */}
             {movie.trailer && (
             <div className="mt-8">
-                <h2 className="text-lg md:text-xl font-semibold mb-4">📺 Trailer</h2>
+                <h2 className="text-lg md:text-xl font-bold mb-4">📺 Trailer</h2>
                 <div className="aspect-video">
                 <iframe
                     src={
@@ -152,10 +153,11 @@ export default function MovieDetail() {
                 </div>
             </div>
             )}
-
           </div>
         </div>
+
+        {/* Thông tin phim */}
+        {id && <ShowtimeSection movieId={id} />}
       </main>
-    
   );
 }
