@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import DateSelector from "./DateSelector";
-import ProvinceSelector from "./ProvinceSelector";
-import TheaterShowtimes from "./TheaterShowtimes";
+import DateSelector from "../../components/showtime/DateSelector";
+import ProvinceSelector from "../../components/showtime/ProvinceSelector";
+import TheaterShowtimes from "../../components/showtime/TheaterShowtimes";
 import { provinceService } from "../../services/showtime/provinceService";
 import { showtimeService } from "../../services/showtime/showtimeService";
-import type { Province } from "../..//types/province";
+import type { Province } from "../../types/province";
 import type { TheaterShowtime } from "../../types/showtime";
 
 export default function ShowtimeSection({ movieId }: { movieId: string }) {

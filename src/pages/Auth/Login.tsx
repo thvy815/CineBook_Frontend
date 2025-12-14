@@ -46,6 +46,7 @@ const Login: React.FC = () => {
       setUser(res.user);
       localStorage.setItem("user", JSON.stringify(res.user));
 
+      alert("Đăng nhập thành công");
       navigate("/"); // chuyển về trang chủ
     } catch (err: any) {
       alert(err.response?.data?.message || "Sai tài khoản hoặc mật khẩu");

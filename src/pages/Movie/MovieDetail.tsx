@@ -4,7 +4,7 @@ import { getPosterUrl } from "../../utils/getPosterUrl";
 import { formatCountry, formatAge, formatDate } from "../../utils/format";
 import { movieService } from "../../services/movie/movieService";
 import type { MovieDetail } from "../../types/movie";
-import ShowtimeSection from "../../components/showtime/ShowtimeSelection";
+import ShowtimeSection from "../Showtime/ShowtimeSelection";
 
 export default function MovieDetail() {
   const { id } = useParams<{ id: string }>();
@@ -33,19 +33,19 @@ export default function MovieDetail() {
   // Loading
   if (loading)
     return (
-        <div className="text-center text-white mt-20">Đang tải...</div>
+        <div className="min-h-screen flex items-center justify-center text-white">Đang tải...</div>
     );
 
   // Error
   if (error)
     return (
-        <div className="text-center text-red-400 mt-20">{error}</div>
+        <div className="min-h-screen flex items-center justify-center text-red-400">{error}</div>
     );
 
   // Nếu không tìm thấy phim
   if (!movie)
     return (
-        <div className="text-center text-gray-400 mt-20">Không tìm thấy phim.</div>
+        <div className="min-h-screen flex items-center justify-center text-gray-400">Không tìm thấy phim.</div>
     );
 
   return (
@@ -66,21 +66,21 @@ export default function MovieDetail() {
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">
               {movie.title}
             </h1>
-            <div className="space-y-2 text-base md:text-lg">
+            <div className="space-y-2 text-base md:text-base">
               {/* Thể loại */}
               <p>
-                <span className="font-bold">🎭 Thể loại:</span>{" "}
+                <span className="font-bold text-lg">🎭 Thể loại:</span>{" "}
                 {Array.isArray(movie.genres)
                     ? movie.genres.join(", ")
                     : movie.genres || "N/A"}
               </p>
 
               {/* Thời lượng */}
-              <p><span className="font-bold">⏱ Thời lượng:</span> {movie.time}’</p>
+              <p><span className="font-bold text-lg">⏱ Thời lượng:</span> {movie.time}’</p>
 
               {/* Ngôn ngữ */}
               <p>
-                <span className="font-bold">🗣 Ngôn ngữ:</span>{" "}
+                <span className="font-bold text-lg">🗣 Ngôn ngữ:</span>{" "}
                 {Array.isArray(movie.spokenLanguages)
                     ? movie.spokenLanguages.join(", ")
                     : movie.spokenLanguages || "N/A"}
@@ -88,19 +88,19 @@ export default function MovieDetail() {
 
               {/* Quốc gia*/}
               <p>
-                <span className="font-bold">🌍 Quốc gia:</span>{" "}
+                <span className="font-bold text-lg">🌍 Quốc gia:</span>{" "}
                 {formatCountry(movie.country)}
               </p>
 
               {/* Độ tuổi */}
               <p>
-                <span className="font-bold">🔞 Độ tuổi:</span>{" "}
+                <span className="font-bold text-lg">🔞 Độ tuổi:</span>{" "}
                 {formatAge(movie.age)}
               </p>
 
               {/* Ngày phát hành */}
               <p>
-                <span className="font-bold">📅 Ngày phát hành:</span>{" "}
+                <span className="font-bold text-lg">📅 Ngày phát hành:</span>{" "}
                 {formatDate(movie.releaseDate)}
               </p>
             </div>
@@ -108,7 +108,7 @@ export default function MovieDetail() {
             {/* Nội dung phim */}
             <div className="mt-6">
               <h2 className="text-lg md:text-xl font-bold mb-2">📖 Nội dung phim</h2>
-              <p className="text-justify leading-relaxed">{movie.overview}</p>
+              <p className="text-justify leading-relaxed text-base">{movie.overview}</p>
             </div>
 
             {/* Đạo diễn */}

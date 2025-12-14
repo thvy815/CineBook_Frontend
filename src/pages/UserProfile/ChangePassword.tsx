@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { authService } from "../../services/auth/authService";
 
 const ChangePassword: React.FC = () => {
-  const [oldPassword, setOldPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showOld, setShowOld] = useState(false);
+  const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
 
-    if (!oldPassword || !newPassword || !confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
       setError("Vui lòng điền đầy đủ thông tin.");
       return;
     }
@@ -31,13 +32,21 @@ const ChangePassword: React.FC = () => {
       return;
     }
 
-    // Giả lập gọi API
-    setTimeout(() => {
-      setMessage("Cập nhật mật khẩu thành công!");
-      setOldPassword("");
+    try {
+      const res = await authService.changePassword({
+        currentPassword,
+        newPassword,
+      });
+
+      setMessage(res.message || "Đổi mật khẩu thành công");
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-    }, 800);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Đổi mật khẩu thất bại"
+      );
+    }
   };
 
   return (
@@ -54,17 +63,17 @@ const ChangePassword: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type={showOld ? "text" : "password"}
+                type={showCurrent ? "text" : "password"}
                 className="w-full border border-gray-300 p-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <button
                 type="button"
-                onClick={() => setShowOld(!showOld)}
+                onClick={() => setShowCurrent(!showCurrent)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
               >
-                {showOld ? <FaEye /> : <FaEyeSlash />}
+                {showCurrent ? <FaEye /> : <FaEyeSlash />}
               </button>
             </div>
           </div>

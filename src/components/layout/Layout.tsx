@@ -1,15 +1,24 @@
 import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import backgroundImg from "@/assets/images/bg-stroke.png";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-white">
+    <div
+      className="min-h-screen flex flex-col text-white overflow-x-hidden"
+      style={{
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       {/* Header */}
       <Header /> 
 
       {/* Nội dung chính */}
-      <main className="flex-1 pt-16"> 
+      <main className="flex-1 mt-16"> 
         {children}
       </main>
 

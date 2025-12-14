@@ -60,6 +60,7 @@ const Register: React.FC = () => {
       localStorage.setItem("accessToken", res.accessToken);
       localStorage.setItem("refreshToken", res.refreshToken);
 
+      alert("Đăng ký thành công. Vui lòng đăng nhập lại.");
       navigate("/login"); // chuyển đến trang đăng nhập
     } catch (err: any) {
       alert(err.response?.data?.message || "Đăng ký thất bại");

@@ -11,4 +11,12 @@ export const authService = {
     const res = await authApi.post("/login", data);
     return res.data;
   },
+
+  changePassword: async (payload: {
+    currentPassword: string;
+    newPassword: string;
+  }) => {
+    const res = await authApi.post("/change-password", payload);
+    return res.data; // { message }
+  }
 };
