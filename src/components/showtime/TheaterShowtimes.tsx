@@ -1,6 +1,18 @@
 import type { TheaterShowtime } from "../../types/showtime";
 
-export default function TheaterShowtimes({ data }: { data: TheaterShowtime[]; }) {
+interface TheaterShowtimesProps {
+  data: TheaterShowtime[];
+  onSelectShowtime: (showtime: {
+    showtimeId: string;
+    theaterId: string;
+    theaterName: string;
+    roomId: string;
+    roomName: string;
+    startTime: string;
+  }) => void;
+}
+
+export default function TheaterShowtimes({ data, onSelectShowtime }: TheaterShowtimesProps) {
   if (!data.length) {
     return (
       <p className="text-center text-gray-400 mt-10">
@@ -32,6 +44,14 @@ export default function TheaterShowtimes({ data }: { data: TheaterShowtime[]; })
                            text-white text-lg
                            hover:bg-yellow-400 hover:text-black
                            transition"
+                 onClick={() => onSelectShowtime({
+                  showtimeId: s.showtimeId,
+                  theaterId: theater.theaterId,
+                  theaterName: theater.theaterName,
+                  roomId: s.roomId,
+                  roomName: s.roomName,
+                  startTime: s.startTimeFormatted,
+                })}
               >
                 {s.startTimeFormatted}
               </button>

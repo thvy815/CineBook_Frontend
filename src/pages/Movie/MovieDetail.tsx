@@ -4,7 +4,7 @@ import { getPosterUrl } from "../../utils/getPosterUrl";
 import { formatCountry, formatAge, formatDate } from "../../utils/format";
 import { movieService } from "../../services/movie/movieService";
 import type { MovieDetail } from "../../types/movie";
-import ShowtimeSection from "../Showtime/ShowtimeSelection";
+import MovieBookingSection from "../Booking/MovieBookingSection";
 
 export default function MovieDetail() {
   const { id } = useParams<{ id: string }>();
@@ -157,7 +157,7 @@ export default function MovieDetail() {
         </div>
 
         {/* Thông tin phim */}
-        {id && <ShowtimeSection movieId={id} />}
+        {id && <MovieBookingSection movieId={id} movieName={movie.title} />}
       </main>
   );
 }

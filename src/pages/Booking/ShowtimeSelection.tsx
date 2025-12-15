@@ -7,12 +7,22 @@ import { showtimeService } from "../../services/showtime/showtimeService";
 import type { Province } from "../../types/province";
 import type { TheaterShowtime } from "../../types/showtime";
 
-export default function ShowtimeSection({ movieId }: { movieId: string }) {
+interface ShowtimeSelectionProps {
+  movieId: string;
+  onSelectShowtime: (showtime: {
+    showtimeId: string;
+    theaterId: string;
+    theaterName: string;
+    roomId: string;
+    roomName: string;
+    startTime: string;
+  }) => void;
+}
+
+export default function ShowtimeSection({ movieId, onSelectShowtime }: ShowtimeSelectionProps) {
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [provinceId, setProvinceId] = useState<string>();
-  const [date, setDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [data, setData] = useState<TheaterShowtime[]>([]);
 
   useEffect(() => {
@@ -56,7 +66,7 @@ export default function ShowtimeSection({ movieId }: { movieId: string }) {
       </div>
 
       <div className="mt-6">
-        <TheaterShowtimes data={data} />
+        <TheaterShowtimes data={data} onSelectShowtime={onSelectShowtime} />
       </div>
     </section>
   );
