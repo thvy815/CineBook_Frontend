@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { SeatTicketDraft, FnbDraft } from "../../types/bookingDraft";
 
 interface Props {
@@ -27,11 +27,35 @@ export default function BookingBar({
   onSubmit,
 }: Props) {
   const [time, setTime] = useState(300);
+  const intervalRef = useRef<number | null>(null);
 
+  // Start / stop timer dựa vào số ghế
   useEffect(() => {
-    const t = setInterval(() => setTime(v => Math.max(0, v - 1)), 1000);
-    return () => clearInterval(t);
-  }, []);
+    // Nếu chưa chọn ghế, clear timer
+    if (seats.length === 0) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setTime(300); // reset nhưng không chạy countdown
+      return;
+    }
+
+    // Nếu chọn ghế lần đầu (timer chưa chạy), start timer
+    if (!intervalRef.current) {
+      setTime(300); // reset về 5 phút
+      intervalRef.current = setInterval(() => {
+        setTime(v => {
+          if (v <= 1) {
+            clearInterval(intervalRef.current!);
+            intervalRef.current = null;
+            return 0;
+          }
+          return v - 1;
+        });
+      }, 1000);
+    }
+  }, [seats.length]);
 
   return (
     <div className="fixed bottom-0 left-0 w-full bg-black/95 border-t border-yellow-400 p-4 z-50">

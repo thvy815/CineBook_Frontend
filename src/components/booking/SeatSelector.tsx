@@ -1,7 +1,9 @@
 import { useState } from "react";
 import type { Seat } from "../../types/showtime";
+import { seatService } from "../../services/showtime/seatService";
 
 interface Props {
+  showtimeId: string;
   roomName: string;
   seats: Seat[];
   maxSeats: number;
@@ -9,17 +11,11 @@ interface Props {
   onChange: (v: string[]) => void;
 }
 
-export default function SeatSelector({
-  roomName,
-  seats,
-  maxSeats,
-  selectedSeats,
-  onChange,
-}: Props) {
+export default function SeatSelector({ showtimeId, roomName, seats, maxSeats, selectedSeats, onChange }: Props) {
 
   const [error, setError] = useState<string | null>(null);
 
-  const toggleSeat = (seat: Seat) => {
+  const toggleSeat = async (seat: Seat) => {
     setError(null);
 
     if (seat.status !== "Available") return;
@@ -33,18 +29,33 @@ export default function SeatSelector({
       return sum + (seatObj?.seatType === "DOUBLE" ? 2 : 1);
     }, 0);
 
-    if (isSelected) {
-      onChange(selectedSeats.filter(s => s !== seat.seatNumber));
-      return;
-    }
+    try {
+      if (isSelected) {
+        // Hủy chọn -> release seat
+        await seatService.releaseSeat({
+          showtimeId: showtimeId, 
+          seatId: seat.id, //showtimeSeatId
+        });
 
-    // Nếu chọn ghế này vượt số người
-    if (currentSeatCount + size > maxSeats) {
-      setError(`❌ Bạn chỉ được chọn tối đa ${maxSeats} ghế`);
-      return;
-    }
+        onChange(selectedSeats.filter(s => s !== seat.seatNumber));
+        return;
+      }
 
-    onChange([...selectedSeats, seat.seatNumber]);
+      if (currentSeatCount + size > maxSeats) {
+        setError(`❌ Bạn chỉ được chọn tối đa ${maxSeats} ghế`);
+        return;
+      }
+
+      // Chọn ghế -> lock seat
+      await seatService.lockSeat({
+        showtimeId: showtimeId,
+        seatId: seat.id,
+      });
+
+      onChange([...selectedSeats, seat.seatNumber]);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Đã có lỗi xảy ra");
+    }
   };
 
   // 📌 Group ghế theo hàng

@@ -11,6 +11,8 @@ import type { FnbItem } from "../../types/fnbItem";
 import { fnbService } from "../../services/pricing/fnbService";
 import { bookingService } from "../../services/booking/bookingService";
 import { useNavigate } from "react-router-dom";
+import { promotionService, type Promotion } from "../../services/promotion/promotionServices";
+import PromotionSelector from "../../components/booking/PromotionSelector";
 
 interface BookingPageProps {
   selectedShowtime: {
@@ -38,19 +40,24 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
     
     const [loadingSeats, setLoadingSeats] = useState(false);
 
+    const [promotions, setPromotions] = useState<Promotion[]>([]);
+    const [promotionCode, setPromotionCode] = useState<string | null>(null);
+
     /* ================= LOAD DATA ================= */
     useEffect(() => {
-        async function loadSeats() {
+        async function loadData() {
             setLoadingSeats(true);
             try {
-                const [seatData, priceData, fnbData] = await Promise.all([
+                const [seatData, priceData, fnbData, promoData] = await Promise.all([
                 showtimeSeatService.getByShowtimeId(selectedShowtime.showtimeId),
                 seatPriceService.getSeatPrices(),
                 fnbService.getAll(),
+                promotionService.getAll(),
                 ]);
                 setSeats(seatData);
                 setSeatPrices(priceData);
                 setFnbItems(fnbData);
+                setPromotions(promoData);
             } catch (err) {
                 console.error("Load booking data failed", err);
             } finally {
@@ -59,7 +66,7 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
         }
 
         if (selectedShowtime.showtimeId) {
-            loadSeats();
+            loadData();
         }
     }, [selectedShowtime.showtimeId]);
 
@@ -68,8 +75,7 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
         const map = new Map<string, number>();
         seatPrices.forEach(p => {
         map.set(`${p.seatType}-${p.ticketType}`, p.basePrice);
-        });
-        console.log("💰 priceMap:", map); 
+        }); 
         return map;
     }, [seatPrices]);
 
@@ -147,18 +153,40 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
     [fnbDraft]
     );
 
-    const totalPrice = seatTotal + fnbTotal;
+    const appliedPromotion = useMemo(() => {
+        if (!promotionCode) return null;
+        return promotions.find(p => p.code.toUpperCase() === promotionCode.toUpperCase() && p.isActive) || null;
+    }, [promotionCode, promotions]);
+
+    const discountedTotalPrice = useMemo(() => {
+        const baseTotal = seatTotal + fnbTotal;
+        if (!appliedPromotion) return baseTotal;
+
+        if (appliedPromotion.discountType === "PERCENT") {
+            return Math.max(0, baseTotal - (baseTotal * appliedPromotion.discountValue) / 100);
+        } else {
+            return Math.max(0, baseTotal - appliedPromotion.discountValue);
+        }
+    }, [seatTotal, fnbTotal, appliedPromotion]);
 
     const bookingDraft: BookingDraft = {
         showtimeId: selectedShowtime.showtimeId,
         seats: seatDraft,
         fnBs: fnbDraft,
-        totalPrice,
+        totalPrice: discountedTotalPrice,
     };
 
     /* ================= SUBMIT ================= */
     async function submitBooking() {
-        const userId = localStorage.getItem("userId");
+        const userJson = localStorage.getItem("user");
+        let userId: string | null = null;
+
+        if (userJson) {
+            const user = JSON.parse(userJson); // parse ra object
+            userId = user.id; // lấy id
+        }
+
+        console.log(userId);
 
         if (!userId) {
             alert("Vui lòng đăng nhập để tiếp tục đặt vé");
@@ -177,18 +205,24 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
                 quantity: 1,
                 price: s.price,
             })),
+
             fnBs: bookingDraft.fnBs.map(f => ({
                 fnbItemId: f.fnbItemId,
                 quantity: f.quantity,
             })),
-            promotionCode: null,
+
+            promotionCode: promotionCode,
         };
 
         console.log("🚀 POST pending booking:", payload);
 
         try {
             const result = await bookingService.createBooking(payload);
+            const bookingId = result.bookingId;
             console.log("✅ Booking pending created:", result);
+
+            // Chuyển sang trang checkout
+            navigate(`/checkout/${bookingId}`);
         } catch (err) {
             console.error("❌ Create booking failed:", err);
             alert("Đặt vé thất bại, vui lòng thử lại");
@@ -208,6 +242,7 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
                 </p>
             ) : (
             <SeatSelector
+                showtimeId={selectedShowtime.showtimeId}
                 roomName={selectedShowtime.roomName}
                 seats={seats} 
                 maxSeats={totalTickets}
@@ -216,6 +251,8 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
             )}
 
             <ComboSelector value={combos} onChange={setCombos} />
+
+            <PromotionSelector value={promotionCode} onChange={setPromotionCode} />
 
             <BookingBar
                 movieName={movieName} 
@@ -226,7 +263,7 @@ export default function BookingPage({ selectedShowtime, movieName }: BookingPage
                 seats={seatDraft}
                 fnBs={fnbDraft} 
 
-                totalPrice={bookingDraft.totalPrice}
+                totalPrice={discountedTotalPrice}
                 canSubmit={
                     totalTickets > 0 &&
                     seatDraft.reduce((sum, s) => sum + (s.seatType === "DOUBLE" ? 2 : 1), 0) === totalTickets

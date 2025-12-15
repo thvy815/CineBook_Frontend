@@ -9,6 +9,7 @@ import NowPlayingMovie from "./pages/Movie/NowPlayingMovie";
 import UpcomingMovie from "./pages/Movie/UpcomingMovie";
 import MovieDetail from "./pages/Movie/MovieDetail";
 import ScrollToTop from "./components/ui/ScrollToTop.tsx";
+import CheckoutPage from "./pages/Booking/CheckoutPage.tsx";
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/movies/now-playing" element={<NowPlayingMovie />} />
           <Route path="/movies/upcoming" element={<UpcomingMovie />} />
+
+          {/* Checkout page */}
+          <Route path="/checkout/:bookingId" element={<CheckoutPage />} />
         </Routes>
       </Layout>
     </Router>
