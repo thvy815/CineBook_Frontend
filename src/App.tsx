@@ -8,6 +8,7 @@ import Profile from "./pages/UserProfile/ProfilePage.tsx";
 import NowPlayingMovie from "./pages/Movie/NowPlayingMovie";
 import UpcomingMovie from "./pages/Movie/UpcomingMovie";
 import MovieDetail from "./pages/Movie/MovieDetail";
+import AdminDashboard from "./pages/Report/AdminDashboard.tsx";
 import ScrollToTop from "./components/ui/ScrollToTop.tsx";
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
       <Layout>
         <Routes>
           {/* Mặc định vào home */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/admin/report" replace />} />
 
           {/* Auth pages */}
           <Route path="/login" element={<Login />} />
@@ -30,6 +31,10 @@ function App() {
 
           {/* Home pages */}
           <Route path="/home" element={<Home />} />
+
+          {/* Admin dashboard pages */}
+          <Route path="/admin/report" element={<AdminDashboard />} />
+
 
           {/* Movie pages */}
           <Route path="/movies/:id" element={<MovieDetail />} />

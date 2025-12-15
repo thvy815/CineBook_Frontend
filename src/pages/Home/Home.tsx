@@ -8,7 +8,7 @@ import { useBannerCarousel } from "../../hooks/useBannerCarousel";
 
 // API service + types
 import { movieService } from "../../services/movie/movieService";
-import type { MovieDetail } from "../../services/movie/movieService";
+import type { MovieDetail } from "../../types/movie"; 
 
 // Components
 import QuickBookingBar from "../../components/ui/QuickBookingBar";
