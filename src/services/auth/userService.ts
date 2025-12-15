@@ -1,12 +1,5 @@
 // src/services/userAdminService.ts
 import { authApi } from "./authApi";
-import type {
-  UserListResponse,
-  StatsOverviewResponse,
-  UserRegistrationStatsResponse,
-} from "../../types/auth"; 
-import type { GetUsersParams } from "../../types/auth";  
-import type { PageResponse } from "../../types/PageResponse"; 
 
 export const userAdminService = {
   // =========================
@@ -53,4 +46,18 @@ export const userAdminService = {
       totalAdmins: users.filter((u: any) => u.role === "Admin").length,
     };
   },
+    // =========================
+  // UPDATE USER ROLE & STATUS (ADMIN)
+  // =========================
+  updateUserRoleStatus: async (
+    userId: string,
+    payload: {
+      role: string;
+      status: string;
+    }
+  ) => {
+    const res = await authApi.put(`/users/${userId}`, payload);
+    return res.data;
+  },
+
 };
