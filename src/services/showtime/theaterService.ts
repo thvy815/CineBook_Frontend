@@ -1,80 +1,48 @@
-// src/services/theaterService.ts
-import { showtimeClient } from "../apiClient";
-
+import axios from "axios";
 import type {
-  TheaterRequest,
-  TheaterResponse,
-  MovieShowtimesResponse,
-  MoviesWithTheatersResponse,
+  TheaterDto,
+  CreateTheaterDto,
+  UpdateTheaterDto,
 } from "../../types/theater";
 
+const api = axios.create({
+  baseURL: "https://localhost:7156/api/Theater",
+  headers: { "Content-Type": "application/json" },
+});
+
 export const theaterService = {
-  createTheater: async (data: TheaterRequest): Promise<TheaterResponse> => {
-    const res = await showtimeClient.post<TheaterResponse>("/theaters", data);
+  // GET ALL
+  getAll: async (): Promise<TheaterDto[]> => {
+    const res = await api.get("");
     return res.data;
   },
 
-  getTheaterById: async (id: string): Promise<TheaterResponse> => {
-    const res = await showtimeClient.get<TheaterResponse>(`/theaters/${id}`);
+  // CREATE
+  create: async (data: CreateTheaterDto): Promise<TheaterDto> => {
+    const res = await api.post("", data);
     return res.data;
   },
 
-  getAllTheaters: async (): Promise<TheaterResponse[]> => {
-    const res = await showtimeClient.get<TheaterResponse[]>("/theaters");
-    return res.data;
-  },
-
-  getTheatersByProvince: async (
-    provinceId: string
-  ): Promise<TheaterResponse[]> => {
-    const res = await showtimeClient.get<TheaterResponse[]>(
-      "/theaters/search",
-      {
-        params: {
-          provinceId: provinceId,
-        },
-      }
-    );
-    return res.data;
-  },
-
-  updateTheater: async (
+  // UPDATE
+  update: async (
     id: string,
-    data: TheaterRequest
-  ): Promise<TheaterResponse> => {
-    const res = await showtimeClient.put<TheaterResponse>(
-      `/theaters/${id}`,
-      data
-    );
+    data: UpdateTheaterDto
+  ): Promise<TheaterDto> => {
+    const res = await api.put(`/${id}`, data);
     return res.data;
   },
 
-  deleteTheater: async (id: string): Promise<void> => {
-    await showtimeClient.delete(`/theaters/${id}`);
-  },
-
-  getMoviesByTheater: async (
-    theaterId: string
-  ): Promise<MovieShowtimesResponse[]> => {
-    const res = await showtimeClient.get<MovieShowtimesResponse[]>(
-      `/theaters/${theaterId}/movies`
-    );
-    return res.data;
-  },
-
-  getMoviesWithTheaters: async (
-    date: string,
-    movieId?: string,
-    theaterId?: string
-  ): Promise<MoviesWithTheatersResponse[]> => {
-    const params: any = { date };
-    if (movieId) params.movieId = movieId;
-    if (theaterId) params.theaterId = theaterId;
-
-    const res = await showtimeClient.get<MoviesWithTheatersResponse[]>(
-      "/movies-with-theaters",
-      { params }
-    );
+  // FILTER BY PROVINCE + DATE
+  filterByProvinceAndDate: async (
+    provinceId: string | null,
+    date: string
+  ): Promise<TheaterDto[]> => {
+    const res = await api.get("/filter-by-province", {
+      params: {
+        provinceId,
+        date,
+      },
+    });
     return res.data;
   },
 };

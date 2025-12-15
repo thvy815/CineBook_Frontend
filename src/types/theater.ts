@@ -1,43 +1,24 @@
-export interface TheaterRequest {
-  provinceId: string;
-  name: string;
-  address: string;
-  description: string;
-}
-
-export interface TheaterResponse {
+export interface TheaterDto {
   id: string;
   name: string;
   address: string;
   description: string;
-  provinceName: string;
-  imageUrl?: string;
-}
-
-export interface ShowtimeInfo {
-  showtimeId: string;
-  roomId: string;
-  roomName: string;
-  startTime: string;
-  endTime: string;
+  provinceId: string;
   status: string;
 }
 
-export interface MovieShowtimesResponse {
-  movieId: string;
-  showtimes: ShowtimeInfo[];
+export interface CreateTheaterDto {
+  name: string;
+  address: string;
+  description: string;
+  provinceId: string;
+  status: string;
 }
 
-export interface MoviesWithTheatersResponse {
-  movieId: string;
-  theaters: Array<{
-    theaterId: string;
-    theaterName: string;
-    theaterAddress: string;
-    showtimes: Array<{
-      showtimeId: string;
-      startTime: string;
-      endTime: string;
-    }>;
-  }>;
+export interface UpdateTheaterDto {
+  name: string;
+  address: string;
+  description: string;
+  provinceId: string;
+  status: string;
 }

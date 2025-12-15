@@ -60,4 +60,18 @@ export const userAdminService = {
     return res.data;
   },
 
+    // =========================
+  // ADMIN CREATE USER
+  // =========================
+  createUserByAdmin: async (payload: {
+    email: string;
+    username: string;
+    password: string;
+    role: string;
+    status: string;
+  }) => {
+    const res = await authApi.post("/users", payload);
+    return res.data;
+  },
+
 };

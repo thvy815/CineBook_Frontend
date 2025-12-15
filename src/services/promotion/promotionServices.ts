@@ -1,8 +1,29 @@
-//import axios from "axios";
-//import type { Promotion } from "../../types/promotion";
-//import { API_BASE_URL } from "../../utils/constants";
+import axios from "axios";
+import type {
+  PromotionDto,
+  UpdatePromotionRequest,
+} from "../../types/promotion";
 
-//export const getPromotionById = async (id: string): Promise<Promotion> => {
-//    const response = await axios.get(`${API_BASE_URL}/promotions/${id}`);
-//    return response.data;
-//};
+const api = axios.create({
+  baseURL: "https://localhost:7186/api/pricing",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const promotionService = {
+  // ================= GET ALL PROMOTIONS =================
+  getAll: async (): Promise<PromotionDto[]> => {
+    const res = await api.get("");
+    return res.data;
+  },
+
+  // ================= UPDATE PROMOTION =================
+  update: async (
+    id: string,
+    data: UpdatePromotionRequest
+  ): Promise<PromotionDto> => {
+    const res = await api.put(`/${id}`, data);
+    return res.data;
+  },
+};

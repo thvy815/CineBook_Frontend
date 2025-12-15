@@ -7,6 +7,10 @@ import { useScrollToTop } from "../../hooks/useScrollToTop";
 import OverviewCards from "../../components/report/admin/accounts/OverviewUserCards";
 import UserManagementTable from "../../components/report/admin/accounts/UserManagementTable";
 import MovieManagementTable from "../../components/report/admin/movies/MovieManagementTable";
+import ShowtimeManagementTable from "../../components/report/admin/showtimes/showtimeManagementTable";
+import FacilitiesManagement from "../../components/report/admin/facilities/FacilitiesManagement";
+import PromotionManagement from "../../components/report/admin/promotion/PromotionManagement";
+import BookingManagement from "../../components/report/admin/bookings/BookingManagement";
 
 type Tab = {
   id: string;
@@ -18,9 +22,6 @@ const TABS: Tab[] = [
   { id: "movies", label: "Quản lý phim" },
   { id: "showtimes", label: "Quản lý lịch chiếu" },
   { id: "bookings", label: "Quản lý đặt vé" },
-  { id: "payments", label: "Quản lý thanh toán" },
-  { id: "notifications", label: "Quản lý thông báo" },
-  { id: "reviews", label: "Quản lý đánh giá" },
   { id: "facilities", label: "Quản lý cơ sở vật chất" },
   { id: "promotions", label: "Quản lý mã giảm giá" },
 ];
@@ -98,10 +99,11 @@ const AdminDashboard: React.FC = () => {
             )}
 
             {activeTab === "showtimes" && (
-              <section>
-                <h2 className="text-lg font-semibold text-slate-200 mb-4">
-                  Quản lý lịch chiếu
+              <section className="space-y-6">
+                <h2 className="text-lg font-semibold text-slate-100">
                 </h2>
+                
+                <ShowtimeManagementTable/>
               </section>
             )}
 
@@ -110,6 +112,25 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-lg font-semibold text-slate-200 mb-4">
                   Quản lý đặt vé
                 </h2>
+                <BookingManagement/>
+              </section>
+            )}
+
+            {activeTab === "facilities" && (
+              <section>
+                <h2 className="text-lg font-semibold text-slate-200 mb-4">
+                  Quản lý cơ sở vật chất
+                </h2>
+                <FacilitiesManagement/>
+              </section>
+            )}
+
+            {activeTab === "promotions" && (
+              <section>
+                <h2 className="text-lg font-semibold text-slate-200 mb-4">
+                  Quản lý mã giảm giá
+                </h2>
+                <PromotionManagement/>
               </section>
             )}
           </div>

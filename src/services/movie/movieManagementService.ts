@@ -9,6 +9,14 @@ const movieManagementClient = axios.create({
   },
 });
 
+const movieImportClient = axios.create({
+  baseURL: "https://localhost:7194/api/Import",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+
 export const movieManagementService = {
   /* ===================== ADMIN SEARCH ===================== */
   adminList: async (params: {
@@ -77,6 +85,14 @@ export const movieManagementService = {
   getByStatus: async (status: string): Promise<MovieDetail[]> => {
     const res = await movieManagementClient.get<MovieDetail[]>(
       `/status/${status}`
+    );
+    return res.data;
+  },
+
+  /* ===================== 🔄 SYNC ALL MOVIES (TMDB) ===================== */
+  syncAllFromTmdb: async (): Promise<{ message: string }> => {
+    const res = await movieImportClient.post<{ message: string }>(
+      "/sync-all"
     );
     return res.data;
   },

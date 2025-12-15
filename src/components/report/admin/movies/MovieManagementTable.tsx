@@ -260,21 +260,45 @@ export default function MovieManagementTable() {
     <div className="w-full min-h-screen bg-slate-950 text-slate-200 space-y-8 px-8 py-6">
       <OverviewMovieCards />
 
-      {/* ===== SEARCH BAR ===== */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-        <input
-          className="
-            w-full pl-10 pr-4 py-2 rounded-lg
-            bg-slate-900 border border-slate-700
-            text-slate-200 placeholder-slate-400
-            focus:outline-none focus:ring-2 focus:ring-yellow-500
-          "
-          placeholder="Tìm kiếm phim..."
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-      </div>
+      {/* ===== SEARCH BAR + SYNC ===== */}
+<div className="flex items-center gap-3 max-w-3xl">
+  <div className="relative flex-1">
+    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+    <input
+      className="
+        w-full pl-10 pr-4 py-2 rounded-lg
+        bg-slate-900 border border-slate-700
+        text-slate-200 placeholder-slate-400
+        focus:outline-none focus:ring-2 focus:ring-yellow-500
+      "
+      placeholder="Tìm kiếm phim..."
+      value={keyword}
+      onChange={(e) => setKeyword(e.target.value)}
+    />
+  </div>
+
+  {/* ===== SYNC BUTTON ===== */}
+  <button
+    onClick={async () => {
+      try {
+        const res = await movieManagementService.syncAllFromTmdb();
+        Swal.fire("Thành công", res.message, "success");
+      } catch {
+        Swal.fire("Lỗi", "Không thể đồng bộ phim từ TMDB", "error");
+      }
+    }}
+    className="
+      flex items-center gap-2 px-4 py-2
+      bg-emerald-600 hover:bg-emerald-700
+      text-white rounded-lg
+      whitespace-nowrap
+    "
+  >
+    <Archive size={16} />
+    Đồng bộ
+  </button>
+</div>
+
 
       <MovieTable status="NowPlaying" keyword={debouncedKeyword} />
       <MovieTable status="Upcoming" keyword={debouncedKeyword} />
