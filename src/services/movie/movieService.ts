@@ -27,4 +27,30 @@ export const movieService = {
     const res = await axios.get(`${DETAIL_URL}/${id}`);
     return res.data;
   },
+   searchMovies: async (
+    title: string,
+    page: number = 0,
+    size: number = 10
+  ): Promise<{ content: MovieDetail[] }> => {
+    const res = await movieClient.get<{ content: MovieDetail[] }>("/search", {
+      params: { title, page, size },
+    });
+    return res.data;
+  },
+
+  // Get movie stats overview
+  getStatsOverview: async (): Promise<{
+    totalMovies: number;
+    nowPlaying: number;
+    upcoming: number;
+    archived: number;
+  }> => {
+    const res = await movieClient.get<{
+      totalMovies: number;
+      nowPlaying: number;
+      upcoming: number;
+      archived: number;
+    }>("/stats/overview");
+    return res.data;
+  },
 };
