@@ -2,8 +2,9 @@ import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import backgroundImg from "@/assets/images/bg-stroke.png";
+import { Outlet } from "react-router-dom";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = () => {
   return (
     <div
       className="min-h-screen flex flex-col text-white overflow-x-hidden"
@@ -19,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Nội dung chính */}
       <main className="flex-1 mt-16"> 
-        {children}
+        <Outlet />
       </main>
 
       {/* Footer */}
