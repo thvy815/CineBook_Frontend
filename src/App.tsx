@@ -12,6 +12,20 @@ import AdminDashboard from "./pages/Report/AdminDashboard.tsx";
 import ScrollToTop from "./components/ui/ScrollToTop.tsx";
 import CheckoutPage from "./pages/Booking/CheckoutPage.tsx";
 
+const getDefaultRoute = () => {
+  const userStr = localStorage.getItem("user");
+  if (!userStr) return "/home"; // không có user → vào home
+
+  try {
+    const user = JSON.parse(userStr);
+    if (Number(user.role) === 1) return "/admin/report"; // admin → vào dashboard
+    return "/home"; // customer → vào home
+  } catch {
+    return "/home"; // nếu parse lỗi → vào home
+  }
+};
+
+
 function App() {
   return (
     <Router>
@@ -20,7 +34,7 @@ function App() {
       <Layout>
         <Routes>
           {/* Mặc định vào home */}
-          <Route path="/" element={<Navigate to="/admin/report" replace />} />
+          <Route path="/" element={<Navigate to={getDefaultRoute()} replace />} />
 
           {/* Auth pages */}
           <Route path="/login" element={<Login />} />
