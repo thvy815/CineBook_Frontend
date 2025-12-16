@@ -15,7 +15,7 @@ export default function PromotionManagement() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await promotionService.getAll();
+      const data = await promotionService.getAll1();
       setPromotions(data);
     } finally {
       setLoading(false);
